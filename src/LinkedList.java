@@ -5,11 +5,12 @@
 public class LinkedList {
 
     Node head;
+    Node tail;
     int count;
-    //add to front, add to back, tail, remove from front
 
     public LinkedList(){
         head = null;
+        tail = null;
         count = 0;
     }
 
@@ -24,13 +25,30 @@ public class LinkedList {
             return current;
         }
     }
-    public void add(Object object){
+    public void addToFront(Object object){
+
         Node newNode = new Node(object);
         newNode.next = head;
+
         head = newNode;
+        if (count == 0){
+            tail = head;
+        }
         count++;
+
     }
 
+    public void addToBack(Object object){
+        Node newNode = new Node(object);
+        tail.setNextPtr(newNode);
+        tail = newNode;
+    }
+
+    public Node removeFromFront(){
+        Node returnNode = head;
+        head = head.getNextPtr();
+        return returnNode;
+    }
     public Object get(int index){
         Node current = head;
         for (int i = 0; i < index; i++){
