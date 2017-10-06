@@ -14,16 +14,12 @@ public class LinkedList {
         count = 0;
     }
 
-    public Node getNode(int index){
-        if (index < 0 || index >= count){
-            return null;
-        } else {
-            Node current = head;
-            for (int i = 0; i < index; i++){
-                current = current.getNextPtr();
-            }
-            return current;
-        }
+    public Node getHead(){
+        return head;
+    }
+
+    public Node getTail(){
+        return tail;
     }
     public void addToFront(Object object){
 
@@ -39,16 +35,31 @@ public class LinkedList {
     }
 
     public void addToBack(Object object){
-        Node newNode = new Node(object);
-        tail.setNextPtr(newNode);
-        tail = newNode;
+        if (count == 0){
+            addToFront(object);
+        } else {
+            Node newNode = new Node(object);
+
+            tail.setNextPtr(newNode);
+            tail = newNode;
+        }
+        count++;
     }
 
     public Node removeFromFront(){
-        Node returnNode = head;
-        head = head.getNextPtr();
-        return returnNode;
+        if (count == 1){
+            head = null;
+            tail = null;
+            count = 0;
+            return null;
+        } else {
+            Node returnNode = head;
+            head = head.getNextPtr();
+            count--;
+            return returnNode;
+        }
     }
+
     public Object get(int index){
         Node current = head;
         for (int i = 0; i < index; i++){
@@ -65,10 +76,38 @@ public class LinkedList {
         Node current = head;
         String returned = "[";
         while (current != null){
-            returned += current + ", ";
+            if (current.getNextPtr() == null) {
+                returned += current.get();
+            } else {
+                returned += current.get() + ", ";
+            }
             current = current.getNextPtr();
         }
         returned += "]";
         return returned;
+    }
+
+    public LinkedList duplicate(){
+        LinkedList duplicated = new LinkedList();
+        Node current = head;
+        Object currentData = head.get();
+        while (current.getNextPtr() != null){
+            duplicated.addToBack(currentData);
+            current = current.getNextPtr();
+            currentData = current.get();
+        }
+        duplicated.addToBack(currentData);
+        return duplicated;
+    }
+
+    public LinkedList reverse(){
+        LinkedList reversed = new LinkedList();
+        Node current = head;
+        while (current.getNextPtr() != null){
+            reversed.addToFront(current.get());
+            current = current.getNextPtr();
+        }
+        reversed.addToFront(current.get());
+        return reversed;
     }
 }
