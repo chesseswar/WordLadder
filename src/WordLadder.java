@@ -3,7 +3,7 @@ import java.io.*;
 
 public class WordLadder {
     public static void main (String[] args) throws IOException{
-        System.out.println("Testing for Github #1");
+        Scanner in = new Scanner(new File("dictionary.txt"));
     }
 }
 
