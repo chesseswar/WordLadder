@@ -19,7 +19,7 @@ public class WordLadder {
             LinkedList queueOfStacks = new LinkedList(); // C R A Z Y
             String input = in.next();
             String goal = in.next();
-            if (!dictionary.contains(input) || !dictionary.contains(goal)){
+            if (!dictionary.contains(input) || !dictionary.contains(goal) || input.length() != goal.length()){
                 goOn = false;
             } else if (input.equals(goal)){
                 answer.addToFront(input);
@@ -47,29 +47,38 @@ public class WordLadder {
                 }
             }
             String topWord = "";
-            if (goOn){topWord = ((String)((LinkedList) queueOfStacks.getHead().get()).getHead().get());}
+            if (queueOfStacks.getCount() <= 0){
+                goOn = false;
+            }
+            if (goOn){
+                topWord = ((String)((LinkedList) queueOfStacks.getHead().get()).getHead().get());
+            }
 
-                while (!topWord.equals(goal) && goOn){
-                    LinkedList dequeue = (LinkedList) (queueOfStacks.removeFromFront().get());
-                    String[] wordsOffByOneLetter = oneLetterOff(topWord);
+            while (!topWord.equals(goal) && goOn){
+                LinkedList dequeue = (LinkedList) (queueOfStacks.removeFromFront().get());
+                String[] wordsOffByOneLetter = oneLetterOff(topWord);
+                for (int i = 0; i < wordsOffByOneLetter.length; i++){
+                    if (!usedWords.contains(wordsOffByOneLetter[i]) && dictionary.contains(wordsOffByOneLetter[i])){
+                        usedWords.add(wordsOffByOneLetter[i]);
 
-                    for (int i = 0; i < wordsOffByOneLetter.length; i++){
-                        if (!usedWords.contains(wordsOffByOneLetter[i]) && dictionary.contains(wordsOffByOneLetter[i])){
-                            usedWords.add(wordsOffByOneLetter[i]);
-                            LinkedList stack = dequeue.duplicate();
-
-                            stack.addToFront(wordsOffByOneLetter[i]);
-                            queueOfStacks.addToBack(stack);
-                            if (wordsOffByOneLetter[i].equals(goal)){
-                                answer = stack.reverse();
-                                goOn = false;
-                                itWorks = true;
-                                break;
-                            }
+                        LinkedList stack = dequeue.duplicate();
+                        stack.addToFront(wordsOffByOneLetter[i]);
+                        queueOfStacks.addToBack(stack);
+                        if (wordsOffByOneLetter[i].equals(goal)){
+                            answer = stack.reverse();
+                            goOn = false;
+                            itWorks = true;
+                            break;
                         }
                     }
+                }
+                if (queueOfStacks.toString().equals("[]")){
+                    break;
+                } else {
                     topWord = ((String)((LinkedList) queueOfStacks.getHead().get()).getHead().get());
                 }
+            }
+
             if (!itWorks){
                 System.out.println("There is no word ladder between " + input + " and " + goal + "!");
             } else if (itWorks){

@@ -18,9 +18,6 @@ public class LinkedList {
         return head;
     }
 
-    public Node getTail(){
-        return tail;
-    }
     public void addToFront(Object object){
 
         Node newNode = new Node(object);
